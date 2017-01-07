@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/Frameworks
+END
+.DS_Store
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/Frameworks/.DS_Store
+END
+libcrypto.a
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/Frameworks/libcrypto.a
+END
+libssl.a
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/Frameworks/libssl.a
+END

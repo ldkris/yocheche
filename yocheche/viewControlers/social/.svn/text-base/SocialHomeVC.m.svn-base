@@ -1,0 +1,702 @@
+//
+//  SocialHomeVC.m
+//  yocheche
+//
+//  Created by carcool on 9/18/15.
+//  Copyright (c) 2015 qinyun. All rights reserved.
+//
+
+#import "SocialHomeVC.h"
+#import <ShareSDK/ShareSDK.h>
+#import "HotPostListVC.h"
+#import "PostDeatilVC.h"
+#import "ChooseReleaseTypeVC.h"
+#import "SlidePostVC.h"
+#import "PostNameCell.h"
+#import "OtherCenterVC.h"
+@interface SocialHomeVC ()
+
+@end
+
+@implementation SocialHomeVC
+@synthesize m_scrollView,m_followView,m_hotView,m_newFriendView;
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view from its nib.
+    self.navigationController.navigationBar.hidden=YES;
+    [self.bg removeFromSuperview];
+    [self.view insertSubview:self.bg atIndex:0];
+    self.bg.userInteractionEnabled=YES;
+    self.topLineView=[[UIView alloc] initWithFrame:CGRectMake(0,28, 160, 2)];
+    [self.topLineView setBackgroundColor:YCC_Green];
+//    [self.topLineView.layer setCornerRadius:1.0];
+    [self.topbg addSubview:self.topLineView];
+    [self.labelFollow setTextColor:YCC_DarkGray];
+    [self.labelHot setTextColor:YCC_DarkGray];
+    self.friendSex=@"";
+    self.friendType=@"1";
+    [self createFiltrateView];
+    [self createScrollView];
+//    [self creatHotView];
+//    [self creatNewFriendView];
+    
+    self.locationMgr = [[CLLocationManager alloc] init];
+    if([self.locationMgr respondsToSelector:@selector(requestAlwaysAuthorization)])
+    {
+        [self.locationMgr requestAlwaysAuthorization]; // 永久授权
+        [self.locationMgr requestWhenInUseAuthorization]; //使用中授权
+    }
+    //设置代理
+    self.locationMgr.delegate = self;
+    // 设置定位精度
+    // kCLLocationAccuracyNearestTenMeters:精度10米
+    // kCLLocationAccuracyHundredMeters:精度100 米
+    // kCLLocationAccuracyKilometer:精度1000 米
+    // kCLLocationAccuracyThreeKilometers:精度3000米
+    // kCLLocationAccuracyBest:设备使用电池供电时候最高的精度
+    // kCLLocationAccuracyBestForNavigation:导航情况下最高精度，一般要有外接电源时才能使用
+    self.locationMgr.desiredAccuracy = kCLLocationAccuracyBest;
+    // distanceFilter是距离过滤器，为了减少对定位装置的轮询次数，位置的改变不会每次都去通知委托，而是在移动了足够的距离时才通知委托程序
+    // 它的单位是米，这里设置为至少移动1000再通知委托处理更新;
+    self.locationMgr.distanceFilter = 1000.0f;
+    //开始定位
+    //        [self.locationMgr startUpdatingLocation];
+    //        self.locationMgr=nil;
+    
+    self.m_currentLocation=(CLLocationCoordinate2D){0.0,0.0};
+    _locService = [[BMKLocationService alloc]init];
+    _locService.delegate = self;
+    //启动LocationService
+    [_locService startUserLocationService];
+}
+#pragma mark ---------- BMKLocationServiceDelegate
+- (void)didUpdateUserHeading:(BMKUserLocation *)userLocation
+{
+    //    NSLog(@"heading is %@",userLocation.heading);
+}
+//处理位置坐标更新
+- (void)didUpdateBMKUserLocation:(BMKUserLocation *)userLocation
+{
+    //发起反向地理编码检索
+    self.m_currentLocation= (CLLocationCoordinate2D){userLocation.location.coordinate.latitude, userLocation.location.coordinate.longitude};
+    [_locService stopUserLocationService];
+    [_locService stopUserLocationService];
+    _locService.delegate=nil;
+    _locService=nil;
+    
+    NSLog(@"self.m_currentLocation :%f %f",self.m_currentLocation.latitude,self.m_currentLocation.longitude);
+    [self creatHotView];
+    [self creatNewFriendView];
+
+}
+-(void)didFailToLocateUserWithError:(NSError *)error
+{
+    [self stopLoadingWithBG];
+    [self showAlertViewWithTitle:nil message:@"定位失败,请检查系统设置里面定位是否开启" cancelButton:@"确定" others:nil];
+}
+-(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+    [self stopLoadingWithBG];
+    [self showAlertViewWithTitle:nil message:@"定位失败,请检查系统设置里面定位是否开启" cancelButton:@"确定" others:nil];
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [MobClick endLogPageView:@"关注"];
+}
+-(void)viewWillAppear:(BOOL)animated
+{
+    AppDelegate *appdelegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
+    [appdelegate.tabBarController showTabBar];
+    self.navigationController.navigationBar.hidden=YES;
+    
+    [MobClick beginLogPageView:@"关注"];
+}
+#pragma mark -------------- scrollview delegate
+-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    if (scrollView.tag==11)//mune top bar
+    {
+        NSInteger index = fabs(scrollView.contentOffset.x) / scrollView.frame.size.width;
+        [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionLayoutSubviews animations:^{
+            [self.topLineView setFrame:CGRectMake(index*160, PARENT_Y(self.topLineView), PARENT_WIDTH(self.topLineView), PARENT_HEIGHT(self.topLineView))];
+        } completion:^(BOOL finished) {
+            [self setTopMenuLabelColor:index];
+        }];
+    }
+    
+}
+#pragma mark ---------- create views -------------------
+-(void)createFiltrateView
+{
+    [self.filtrateView setBackgroundColor:[UIColor clearColor]];
+    [self setFiltrateBtnBorderSelected:self.btnSex1];
+    [self setFiltrateBtnBorderUnSelected:self.btnSex2];
+    [self setFiltrateBtnBorderUnSelected:self.btnSex3];
+    [self setFiltrateBtnBorderSelected:self.btnType1];
+    [self setFiltrateBtnBorderUnSelected:self.btnType2];
+    [self setFiltrateBtnBorderUnSelected:self.btnCancel];
+    [self setFiltrateBtnBorderSelected:self.btnDone];
+    [self.btnCancel addTarget:self action:@selector(removeFiltrateView:) forControlEvents:UIControlEventTouchUpInside];
+    [self.btnDone addTarget:self action:@selector(filtrateDoneBtnPressed) forControlEvents:UIControlEventTouchUpInside];
+}
+-(void)setFiltrateBtnBorderUnSelected:(UIButton*)btn
+{
+    [btn setClipsToBounds:YES];
+    [btn.layer setBorderColor:[[UIColor lightGrayColor] CGColor]];
+    [btn.layer setBorderWidth:1.0];
+    [btn.layer setCornerRadius:3.0];
+    [btn setBackgroundColor:[UIColor clearColor]];
+    [btn setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+}
+-(void)setFiltrateBtnBorderSelected:(UIButton*)btn
+{
+    [btn setClipsToBounds:YES];
+    [btn.layer setBorderColor:[YCC_Green CGColor]];
+    [btn.layer setBorderWidth:1.0];
+    [btn.layer setCornerRadius:3.0];
+    [btn setBackgroundColor:[UIColor clearColor]];
+    [btn setTitleColor:YCC_Green forState:UIControlStateNormal];
+}
+-(void)createScrollView
+{
+    self.m_scrollView=[[UIScrollView alloc] initWithFrame:CGRectMake(0, 64+30, Screen_Width, Screen_Height-49-64-30)];
+    self.m_scrollView.bounces=NO;
+    self.m_scrollView.delegate=self;
+    self.m_scrollView.tag=11;
+    [m_scrollView setContentSize:CGSizeMake(Screen_Width*2,PARENT_HEIGHT(self.m_scrollView))];
+    m_scrollView.showsHorizontalScrollIndicator=NO;
+    m_scrollView.pagingEnabled=YES;
+    [m_scrollView setBackgroundColor:YCC_GrayBG];
+    self.m_scrollView.scrollEnabled=YES;
+    [self.view addSubview:self.m_scrollView];
+    
+    UIButton *btnSender=[UIButton buttonWithType:UIButtonTypeCustom];
+    btnSender.tag=1;
+    [self topMenuBtnPressed:btnSender];
+    
+}
+-(void)creatFollowView
+{
+    self.m_followView=[[FollowView alloc]
+                       initWithFrame:CGRectMake(Screen_Width, 0, Screen_Width, Screen_Height-64-49-30)];
+    self.m_followView.delegate=self;
+    [self.m_scrollView addSubview:m_followView];
+    if ([[MyFounctions getUserInfo] objectForKey:@"account"])
+    {
+        [self updateFollowPostPageindex:[NSString stringWithFormat:@"%d",self.m_followView.pageIndex] pageSize:[NSString stringWithFormat:@"%d",self.m_followView.pageCount]];
+    }
+
+}
+-(void)creatHotView
+{
+    self.m_hotView=[[HotCategoryView alloc]
+                    initWithFrame:CGRectMake(0, 0, Screen_Width, Screen_Height-64-49-30)];
+    self.m_hotView.delegate=self;
+    self.m_hotView.m_currentLocation=(CLLocationCoordinate2D){self.m_currentLocation.latitude,self.m_currentLocation.longitude};
+    [self.m_scrollView addSubview:m_hotView];
+    [self getHotCategoriesLat:[NSString stringWithFormat:@"%f",self.m_currentLocation.latitude] Lng:[NSString stringWithFormat:@"%f",self.m_currentLocation.longitude]];
+}
+-(void)creatNewFriendView
+{
+    self.m_newFriendView=[[NewFriendView alloc]
+                    initWithFrame:CGRectMake(Screen_Width, 0, Screen_Width, Screen_Height-64-49-30)];
+    self.m_newFriendView.delegate=self;
+    self.m_newFriendView.m_currentLocation=(CLLocationCoordinate2D){self.m_currentLocation.latitude,self.m_currentLocation.longitude};
+    [self.m_scrollView addSubview:m_newFriendView];
+    [self submitLBSToBaiduLat:[NSString stringWithFormat:@"%f",self.m_currentLocation.latitude] Lng:[NSString stringWithFormat:@"%f",self.m_currentLocation.longitude]];
+    [self getNewFriendLat:[NSString stringWithFormat:@"%f",self.m_currentLocation.latitude] Lng:[NSString stringWithFormat:@"%f",self.m_currentLocation.longitude] Pageindex:[NSString stringWithFormat:@"%d",self.m_newFriendView.pageIndex] pageSize:[NSString stringWithFormat:@"%d",self.m_newFriendView.pageCount]];
+}
+#pragma mark ----------- post name cell protacal ---------
+-(void)showOtherCenterVCTappedNameCell:(NSString *)account
+{
+    AppDelegate *appdelegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
+    [appdelegate.tabBarController hideTabBar];
+    self.navigationController.navigationBar.hidden=NO;
+    
+    OtherCenterVC *vc=[[OtherCenterVC alloc] init];
+    vc.preData=[NSDictionary dictionaryWithObject:account forKey:@"account"];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+#pragma mark ----------- post pic cell protacal ---------
+-(void)showScreenView:(UIImage *)img
+{
+    if (self.screenBlackBG)
+    {
+        [self.screenBlackBG removeFromSuperview];
+        self.screenBlackBG=nil;
+        [self.bigView removeFromSuperview];
+        self.bigView=nil;
+    }
+    
+    AppDelegate *appdelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
+    //bg
+    self.screenBlackBG=[[UIView alloc] initWithFrame:CGRectMake(0, 0, Screen_Width, Screen_Height)];
+    [self.screenBlackBG setBackgroundColor:[UIColor blackColor]];
+    [self.screenBlackBG setAlpha:1.0];
+    [appdelegate.window addSubview:self.screenBlackBG];
+   
+    self.bigView=[[VIPhotoView alloc] initWithFrame:CGRectMake(0, 0, Screen_Width, Screen_Height) andImage:img];
+    self.bigView.autoresizingMask = (1 << 6) -1;
+    [appdelegate.window addSubview:self.bigView];
+    
+    
+    UIButton *btnRemoveSexView=[UIButton buttonWithType:UIButtonTypeCustom];
+    [btnRemoveSexView setFrame:CGRectMake(0, 0, Screen_Width, Screen_Height)];
+    [btnRemoveSexView addTarget:self action:@selector(removeSexBG) forControlEvents:UIControlEventTouchUpInside];
+    [self.bigView addSubview:btnRemoveSexView];
+}
+-(void)removeSexBG
+{
+    [self.screenBlackBG removeFromSuperview];
+    self.screenBlackBG=nil;
+    [self.bigView removeFromSuperview];
+    self.bigView=nil;
+}
+#pragma mark ======= scroll delegate==============
+//UIScrollViewDelegate方法
+//- (void)scrollViewDidEndDecelerating:(UIScrollView *)sView
+//{
+//    
+//}
+#pragma mark ------- event response ------- top menu
+-(IBAction)topMenuBtnPressed:(id)sender
+{
+    UIButton *btn=(UIButton*)sender;
+    if (btn.tag<2)
+    {
+        [self.m_scrollView scrollRectToVisible:CGRectMake(Screen_Width*btn.tag, PARENT_Y(self.m_scrollView), PARENT_WIDTH(self.m_scrollView),PARENT_HEIGHT(self.m_scrollView)) animated:YES];
+        [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionLayoutSubviews animations:^{
+            [self.topLineView setFrame:CGRectMake(btn.tag*160, PARENT_Y(self.topLineView), PARENT_WIDTH(self.topLineView), PARENT_HEIGHT(self.topLineView))];
+        } completion:^(BOOL finished) {
+            [self setTopMenuLabelColor:btn.tag];
+        }];
+    }
+}
+-(void)setTopMenuLabelColor:(NSInteger)index
+{
+    [self.labelFollow setTextColor:YCC_DarkGray];
+    [self.labelHot setTextColor:YCC_DarkGray];
+    switch (index)
+    {
+        case 0:
+            [self.labelFollow setTextColor:YCC_Green];
+            break;
+        case 1:
+            [self.labelHot setTextColor:YCC_Green];
+            break;
+        default:
+            break;
+    }
+    if(index==0)
+    {
+        self.imgFiltrate.hidden=YES;
+        self.btnFiltrate.hidden=YES;
+        [MobClick endLogPageView:@"热门"];
+        [MobClick beginLogPageView:@"关注"];
+    }
+    else if (index==1)
+    {
+        self.imgFiltrate.hidden=NO;
+        self.btnFiltrate.hidden=NO;
+        [MobClick endLogPageView:@"关注"];
+        [MobClick beginLogPageView:@"热门"];
+    }
+}
+-(IBAction)showFiltrateItems:(id)sender
+{
+    [self showFiltrateView];
+}
+-(void)showFiltrateView
+{
+    [self addBlackBGViewOnKeywindow];
+    self.blackBG.alpha=1.0;
+    [self.blackBG setBackgroundColor:YCC_GrayBG];
+    AppDelegate *appdelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
+    
+//    self.btnRemove=[UIButton buttonWithType:UIButtonTypeCustom];
+//    [self.btnRemove setFrame:CGRectMake(0, 0, Screen_Width, Screen_Height)];
+//    [self.btnRemove addTarget:self action:@selector(removeFiltrateView) forControlEvents:UIControlEventTouchUpInside];
+//    [appdelegate.window addSubview:self.btnRemove];
+    
+    [self.filtrateView setFrame:CGRectMake(0,0, PARENT_WIDTH(self.filtrateView), PARENT_HEIGHT(self.filtrateView))];
+    [appdelegate.window addSubview:self.filtrateView];
+    
+    [self.btnCancel setFrame:CGRectMake(13,Screen_Height-45 ,PARENT_WIDTH(self.btnCancel) ,PARENT_HEIGHT(self.btnCancel) )];
+    [appdelegate.window addSubview:self.btnCancel];
+    [self.btnDone setFrame:CGRectMake(174,Screen_Height-45 ,PARENT_WIDTH(self.btnDone) ,PARENT_HEIGHT(self.btnDone))];
+    [appdelegate.window addSubview:self.btnDone];
+    
+}
+-(IBAction)removeFiltrateView:(id)sender
+{
+    [self.btnDone removeFromSuperview];
+    [self.btnCancel removeFromSuperview];
+    [self.btnRemove removeFromSuperview];
+    self.btnRemove=nil;
+    [self.filtrateView removeFromSuperview];
+    [self removeBLackBGView];
+}
+-(IBAction)filtrateTypeBtnPressed:(id)sender
+{
+    UIButton *btn=(UIButton*)sender;
+    if (btn.tag==0)
+    {
+        [self setFiltrateBtnBorderSelected:self.btnType1];
+        [self setFiltrateBtnBorderUnSelected:self.btnType2];
+    }
+    else
+    {
+        [self setFiltrateBtnBorderUnSelected:self.btnType1];
+        [self setFiltrateBtnBorderSelected:self.btnType2];
+    }
+    
+}
+-(IBAction)filtrateSexBtnPressed:(id)sender
+{
+    UIButton *btn=(UIButton*)sender;
+    if (btn.tag==0)
+    {
+        [self setFiltrateBtnBorderSelected:self.btnSex1];
+        [self setFiltrateBtnBorderUnSelected:self.btnSex2];
+        [self setFiltrateBtnBorderUnSelected:self.btnSex3];
+    }
+    else if (btn.tag==1)
+    {
+        [self setFiltrateBtnBorderUnSelected:self.btnSex1];
+        [self setFiltrateBtnBorderSelected:self.btnSex2];
+        [self setFiltrateBtnBorderUnSelected:self.btnSex3];
+    }
+    else
+    {
+        [self setFiltrateBtnBorderUnSelected:self.btnSex1];
+        [self setFiltrateBtnBorderUnSelected:self.btnSex2];
+        [self setFiltrateBtnBorderSelected:self.btnSex3];
+    }
+}
+-(void)filtrateDoneBtnPressed
+{
+    [self removeFiltrateView:nil];
+    self.m_newFriendView.pageIndex=1;
+    if ([self.btnType1.titleLabel.textColor isEqual:YCC_Green])
+    {
+        self.friendType=@"1";
+    }
+    else
+    {
+        self.friendType=@"2";
+    }
+    if ([self.btnSex1.titleLabel.textColor isEqual:YCC_Green])
+    {
+        self.friendSex=@"";
+    }
+    else if ([self.btnSex2.titleLabel.textColor isEqual:YCC_Green])
+    {
+        self.friendSex=@"1";
+    }
+    else if ([self.btnSex3.titleLabel.textColor isEqual:YCC_Green])
+    {
+        self.friendSex=@"2";
+    }
+    [self getNewFriendLat:[NSString stringWithFormat:@"%f",self.m_newFriendView.m_currentLocation.latitude] Lng:[NSString stringWithFormat:@"%f",self.m_newFriendView.m_currentLocation.longitude] Pageindex:[NSString stringWithFormat:@"%d",self.m_newFriendView.pageIndex] pageSize:[NSString stringWithFormat:@"%d",self.m_newFriendView.pageCount]];
+    
+}
+-(IBAction)showReleasePostVC:(id)sender
+{
+    ChooseReleaseTypeVC *vc=[[ChooseReleaseTypeVC alloc] init];
+    [self presentViewController:[[YCCNavigationController alloc] initWithRootViewController:vc] animated:YES completion:^{
+        
+    }];
+}
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+#pragma mark ------------ event response follow view---------------
+#pragma mark  /////////////////// update follows' post ///////////////
+-(void)updateFollowPostPageindex:(NSString*)Index pageSize:(NSString*)Count
+{
+//    [self showLoadingWithBG];
+    Http *req=[[Http alloc] init];
+    req.socialMethord=@"user/getUserFocusTaList.yo";
+    [req setParams:@[[[MyFounctions getUserInfo] objectForKey:@"account"],Index,Count,@"640",@""] forKeys:@[@"account",@"pageindex",@"pagesize",@"imgWidth",@"imgHeight"]];
+    [req startWithBlock:^{
+        [self stopLoadingWithBG];
+        if ([[req.m_data valueForKey:@"statusCode"] integerValue]==1000)
+        {
+            if ([Index integerValue]==1)
+            {
+                [self.m_followView.m_aryData removeAllObjects];
+            }
+            [self.m_followView.m_aryContentHeight removeAllObjects];
+            [self.m_followView.m_aryCommentHeight removeAllObjects];
+            [self.m_followView.m_aryData addObjectsFromArray:[req.m_data objectForKey:@"userFocusTas"]];
+            for (NSDictionary *postData in self.m_followView.m_aryData)
+            {
+                float height=0;
+                height=[MyFounctions calculateLabelHeightWithString:[postData objectForKey:@"content"] Width:300 font:[UIFont systemFontOfSize:14]]+10;
+                if ([[postData objectForKey:@"content"] isEqualToString:@""])
+                {
+                    height=10;
+                }
+                [self.m_followView.m_aryContentHeight addObject:[NSString stringWithFormat:@"%f",height]];
+                [self.m_followView.m_aryCommentHeight addObject:[NSString stringWithFormat:@"%f",[(NSArray*)[postData objectForKey:@"userComments"] count]*20.0]];
+            }
+            [self.m_followView.m_tableView reloadData];
+        }
+        else
+        {
+            if ([req.m_data valueForKey:@"msg"])
+            {
+                [self showAlertViewWithTitle:nil message:[req.m_data valueForKey:@"msg"] cancelButton:@"确定" others:nil];
+            }
+            else
+            {
+                [self showNetworkError];
+            }
+            
+        }
+        [self.m_followView.refreshFooter endRefreshing];
+        [self.m_followView.refreshHeader endRefreshing];
+    }];
+    
+}
+-(void)likePostOperate:(NSMutableDictionary*)postData postCell:(PostInfoCell*)followCell
+{
+//    [self showLoadingWithBG];
+    Http *req=[[Http alloc] init];
+    req.socialMethord=@"user/likeUserInvitation.yo";
+    [req setParams:@[[[MyFounctions getUserInfo] objectForKey:@"account"],[postData objectForKey:@"invitationId"],[[postData objectForKey:@"follow"] integerValue]==0?@"1":@"0"] forKeys:@[@"account",@"invitationId",@"type"]];
+    [req startWithBlock:^{
+        [self stopLoadingWithBG];
+        if ([[req.m_data valueForKey:@"statusCode"] integerValue]==1000)
+        {
+            if ([[postData objectForKey:@"follow"] integerValue]==1)//取消赞
+            {
+                [followCell.data setObject:@"0" forKey:@"follow"];
+                [followCell.data setObject:[NSString stringWithFormat:@"%d",[[postData objectForKey:@"like_count"] integerValue]-1] forKey:@"like_count"];
+            }
+            else//赞
+            {
+                [followCell.data setObject:@"1" forKey:@"follow"];
+                [followCell.data setObject:[NSString stringWithFormat:@"%d",[[postData objectForKey:@"like_count"] integerValue]+1] forKey:@"like_count"];
+            }
+            [followCell updateView];
+        }
+        else
+        {
+            if ([req.m_data valueForKey:@"msg"])
+            {
+                [self showAlertViewWithTitle:nil message:[req.m_data valueForKey:@"msg"] cancelButton:@"确定" others:nil];
+            }
+            else
+            {
+                [self showNetworkError];
+            }
+            
+        }
+        
+    }];
+    
+}
+-(void)sharePostDetail:(NSDictionary*)invitationData
+{
+    NSLog(@"invitationData :%@",invitationData);
+//    [self showLoadingWithBG];
+    Http *req=[[Http alloc] init];
+    req.socialMethord=@"user/shareUserInvitation.yo";
+    [req setParams:@[[[MyFounctions getUserInfo] objectForKey:@"account"],[invitationData objectForKey:@"invitationId"],@"1"] forKeys:@[@"account",@"invitationId",@"shareto"]];
+    [req startWithBlock:^{
+        [self stopLoadingWithBG];
+        if ([[req.m_data valueForKey:@"statusCode"] integerValue]==1000)
+        {
+            //share
+            NSString *imageUrl = [invitationData objectForKey:@"imgurl"];
+            
+            //构造分享内容
+            id<ISSContent> publishContent = [ShareSDK content:[invitationData objectForKey:@"content"]
+                                               defaultContent:[invitationData objectForKey:@"nikename"]
+                                                        image:[ShareSDK imageWithUrl:imageUrl]
+                                                        title:[[invitationData objectForKey:@"title"] isEqualToString:@""]?[invitationData objectForKey:@"content"]:[invitationData objectForKey:@"title"]
+                                                          url:[req.m_data objectForKey:@"shareurl"]
+                                                  description:@"优车车－学车社交平台"
+                                                    mediaType:SSPublishContentMediaTypeNews];
+            //创建弹出菜单容器
+            id<ISSContainer> container = [ShareSDK container];
+            [container setIPadContainerWithView:nil arrowDirect:UIPopoverArrowDirectionUp];
+            
+            //弹出分享菜单
+            [ShareSDK showShareActionSheet:container
+                                 shareList:nil
+                                   content:publishContent
+                             statusBarTips:YES
+                               authOptions:nil
+                              shareOptions:nil
+                                    result:^(ShareType type, SSResponseState state, id<ISSPlatformShareInfo> statusInfo, id<ICMErrorInfo> error, BOOL end) {
+                                        
+                                        if (state == SSResponseStateSuccess)
+                                        {
+                                            NSLog(@"分享成功");
+                                        }
+                                        else if (state == SSResponseStateFail)
+                                        {
+                                            NSLog(@"分享失败,错误码:%d,错误描述:%@", [error errorCode], [error errorDescription]);
+                                        }
+                                    }];
+            
+        }
+        else
+        {
+            if ([req.m_data valueForKey:@"msg"])
+            {
+                [self showAlertViewWithTitle:nil message:[req.m_data valueForKey:@"msg"] cancelButton:@"确定" others:nil];
+            }
+            else
+            {
+                [self showNetworkError];
+            }
+            
+        }
+        
+    }];
+}
+-(void)showPostVC:(NSDictionary*)preData
+{
+    AppDelegate *appdelegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
+    [appdelegate.tabBarController hideTabBar];
+    self.navigationController.navigationBar.hidden=NO;
+    PostDeatilVC *vc=[[PostDeatilVC alloc] init];
+    vc.preData=preData;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+#pragma mark /////////////////// hot categories ///////////////////
+-(void)getHotCategoriesLat:(NSString*)lat Lng:(NSString*)lng
+{
+//    [self showLoadingWithBG];
+    Http *req=[[Http alloc] init];
+    req.socialMethord=@"invitation/getNewHottestIndex.yo";
+    [req setParams:@[lat,lng,@"400",@""] forKeys:@[@"lat",@"lng",@"imgWidth",@"imgHeight"]];
+    [req startWithBlock:^{
+        [self stopLoadingWithBG];
+        if ([[req.m_data valueForKey:@"statusCode"] integerValue]==1000)
+        {
+            self.m_hotView.m_aryData =[req.m_data objectForKey:@"dataList"];
+            [self.m_hotView.m_tableView reloadData];
+        }
+        else
+        {
+            if ([req.m_data valueForKey:@"msg"])
+            {
+                [self showAlertViewWithTitle:nil message:[req.m_data valueForKey:@"msg"] cancelButton:@"确定" others:nil];
+            }
+            else
+            {
+                [self showNetworkError];
+            }
+            
+        }
+        [self.m_hotView.refreshHeader endRefreshing];
+    }];
+    
+}
+-(void)showHotPostListVC:(NSInteger)index
+{
+    AppDelegate *appdelegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
+    [appdelegate.tabBarController hideTabBar];
+    self.navigationController.navigationBar.hidden=NO;
+
+    HotPostListVC *vc=[[HotPostListVC alloc] init];
+    vc.preData=[self.m_hotView.m_aryData objectAtIndex:index];
+    vc.m_currentLocation=self.m_hotView.m_currentLocation;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+-(void)showSlidePostVC
+{
+    AppDelegate *appdelegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
+    [appdelegate.tabBarController hideTabBar];
+    self.navigationController.navigationBar.hidden=NO;
+    
+    SlidePostVC *vc=[[SlidePostVC alloc] init];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+#pragma mark  ////////////////////// new friend //////////////
+-(void)submitLBSToBaiduLat:(NSString *)lat Lng:(NSString *)lng
+{
+    Http *req=[[Http alloc] init];
+    req.socialMethord=@"chat/putUserLBSLocation.yo";
+    [req setParams:@[[[MyFounctions getUserInfo] objectForKey:@"account"],lat,lng] forKeys:@[@"account",@"lat",@"lng"]];
+    [req startWithBlock:^{
+        [self stopLoadingWithBG];
+        if ([[req.m_data valueForKey:@"statusCode"] integerValue]==1000)
+        {
+        }
+        else
+        {
+            if ([req.m_data valueForKey:@"msg"])
+            {
+                [self showAlertViewWithTitle:nil message:[req.m_data valueForKey:@"msg"] cancelButton:@"确定" others:nil];
+            }
+            else
+            {
+                [self showNetworkError];
+            }
+            
+        }
+        [self.m_newFriendView.refreshHeader endRefreshing];
+        [self.m_newFriendView.refreshFooter endRefreshing];
+    }];
+
+}
+-(void)getNewFriendLat:(NSString *)lat Lng:(NSString *)lng Pageindex:(NSString *)Index pageSize:(NSString *)Count
+{
+    Http *req=[[Http alloc] init];
+    req.socialMethord=@"chat/getRangeUserChatList.yo";
+    [req setParams:@[[[MyFounctions getUserInfo] objectForKey:@"account"],lat,lng,self.friendType,self.friendSex,Index,Count,@"150",@""] forKeys:@[@"account",@"lat",@"lng",@"type",@"sex",@"pageindex",@"pagesize",@"imgWidth",@"imgHeight"]];
+    [req startWithBlock:^{
+        [self stopLoadingWithBG];
+        if ([[req.m_data valueForKey:@"statusCode"] integerValue]==1000)
+        {
+            if ([Index integerValue]==1)
+            {
+                [self.m_newFriendView.m_aryData removeAllObjects];
+            }
+            [self.m_newFriendView.m_aryData addObjectsFromArray:[req.m_data objectForKey:@"userChats"]];
+            [self.m_newFriendView.m_tableView reloadData];
+        }
+        else
+        {
+            if ([req.m_data valueForKey:@"msg"])
+            {
+                [self showAlertViewWithTitle:nil message:[req.m_data valueForKey:@"msg"] cancelButton:@"确定" others:nil];
+            }
+            else
+            {
+                [self showNetworkError];
+            }
+        }
+        [self.m_newFriendView.refreshHeader endRefreshing];
+        [self.m_newFriendView.refreshFooter endRefreshing];
+        
+    }];
+
+}
+-(void)showOtherCenterVC:(NSString*)account
+{
+    AppDelegate *appdelegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
+    [appdelegate.tabBarController hideTabBar];
+    self.navigationController.navigationBar.hidden=NO;
+    OtherCenterVC *vc=[[OtherCenterVC alloc] init];
+    vc.preData=[NSDictionary dictionaryWithObject:account forKey:@"account"];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

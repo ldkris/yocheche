@@ -1,0 +1,113 @@
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/Util
+END
+base64.m
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/Util/base64.m
+END
+MD5DataSigner.m
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/Util/MD5DataSigner.m
+END
+RSADataSigner.m
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/Util/RSADataSigner.m
+END
+DataSigner.mm
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/Util/DataSigner.mm
+END
+config.h
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/Util/config.h
+END
+DataVerifier.h
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/Util/DataVerifier.h
+END
+NSDataEx.h
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/Util/NSDataEx.h
+END
+DataVerifier.m
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/Util/DataVerifier.m
+END
+.DS_Store
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/Util/.DS_Store
+END
+RSADataVerifier.h
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/Util/RSADataVerifier.h
+END
+NSDataEx.m
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/Util/NSDataEx.m
+END
+RSADataVerifier.m
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/Util/RSADataVerifier.m
+END
+DataSigner.h
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/Util/DataSigner.h
+END
+openssl_wrapper.h
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/Util/openssl_wrapper.h
+END
+base64.h
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/Util/base64.h
+END
+RSADataSigner.h
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/Util/RSADataSigner.h
+END
+MD5DataSigner.h
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/Util/MD5DataSigner.h
+END
+openssl_wrapper.m
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/Util/openssl_wrapper.m
+END

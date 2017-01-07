@@ -1,0 +1,113 @@
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/export/include/EaseUI/3rdparty/DeviceHelper
+END
+DemoErrorCode.h
+K 25
+svn:wc:ra_dav:version-url
+V 123
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/export/include/EaseUI/3rdparty/DeviceHelper/DemoErrorCode.h
+END
+EMCDDeviceManagerProximitySensorDelegate.h
+K 25
+svn:wc:ra_dav:version-url
+V 150
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/export/include/EaseUI/3rdparty/DeviceHelper/EMCDDeviceManagerProximitySensorDelegate.h
+END
+EMCDDeviceManager+Remind.h
+K 25
+svn:wc:ra_dav:version-url
+V 134
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/export/include/EaseUI/3rdparty/DeviceHelper/EMCDDeviceManager+Remind.h
+END
+wav.h
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/export/include/EaseUI/3rdparty/DeviceHelper/wav.h
+END
+EMCDDeviceManager+Media.h
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/export/include/EaseUI/3rdparty/DeviceHelper/EMCDDeviceManager+Media.h
+END
+EMAudioPlayerUtil.h
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/export/include/EaseUI/3rdparty/DeviceHelper/EMAudioPlayerUtil.h
+END
+interf_dec.h
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/export/include/EaseUI/3rdparty/DeviceHelper/interf_dec.h
+END
+EMAudioRecorderUtil.h
+K 25
+svn:wc:ra_dav:version-url
+V 129
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/export/include/EaseUI/3rdparty/DeviceHelper/EMAudioRecorderUtil.h
+END
+dec_if.h
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/export/include/EaseUI/3rdparty/DeviceHelper/dec_if.h
+END
+if_rom.h
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/export/include/EaseUI/3rdparty/DeviceHelper/if_rom.h
+END
+interf_enc.h
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/export/include/EaseUI/3rdparty/DeviceHelper/interf_enc.h
+END
+amrFileCodec.h
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/export/include/EaseUI/3rdparty/DeviceHelper/amrFileCodec.h
+END
+EMCDDeviceManager+ProximitySensor.h
+K 25
+svn:wc:ra_dav:version-url
+V 143
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/export/include/EaseUI/3rdparty/DeviceHelper/EMCDDeviceManager+ProximitySensor.h
+END
+EMCDDeviceManagerBase.h
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/export/include/EaseUI/3rdparty/DeviceHelper/EMCDDeviceManagerBase.h
+END
+EMCDDeviceManagerDelegate.h
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/export/include/EaseUI/3rdparty/DeviceHelper/EMCDDeviceManagerDelegate.h
+END
+EMVoiceConverter.h
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/export/include/EaseUI/3rdparty/DeviceHelper/EMVoiceConverter.h
+END
+EMCDDeviceManager+Microphone.h
+K 25
+svn:wc:ra_dav:version-url
+V 138
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/export/include/EaseUI/3rdparty/DeviceHelper/EMCDDeviceManager+Microphone.h
+END
+EMCDDeviceManager.h
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/export/include/EaseUI/3rdparty/DeviceHelper/EMCDDeviceManager.h
+END

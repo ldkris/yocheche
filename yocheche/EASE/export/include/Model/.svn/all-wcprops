@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/export/include/Model
+END
+EaseConversationModel.h
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/export/include/Model/EaseConversationModel.h
+END
+IModelCell.h
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/export/include/Model/IModelCell.h
+END
+IModelChatCell.h
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/export/include/Model/IModelChatCell.h
+END
+EaseUserModel.h
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/export/include/Model/EaseUserModel.h
+END
+IMessageModel.h
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/export/include/Model/IMessageModel.h
+END
+EaseMessageModel.h
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/export/include/Model/EaseMessageModel.h
+END
+IConversationModel.h
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/export/include/Model/IConversationModel.h
+END
+IUserModel.h
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/export/include/Model/IUserModel.h
+END

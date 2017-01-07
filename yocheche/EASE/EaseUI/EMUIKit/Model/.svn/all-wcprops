@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/EaseUI/EMUIKit/Model
+END
+EaseConversationModel.h
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/EaseUI/EMUIKit/Model/EaseConversationModel.h
+END
+IModelCell.h
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/EaseUI/EMUIKit/Model/IModelCell.h
+END
+IModelChatCell.h
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/EaseUI/EMUIKit/Model/IModelChatCell.h
+END
+EaseUserModel.h
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/EaseUI/EMUIKit/Model/EaseUserModel.h
+END
+EaseConversationModel.m
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/EaseUI/EMUIKit/Model/EaseConversationModel.m
+END
+IMessageModel.h
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/EaseUI/EMUIKit/Model/IMessageModel.h
+END
+EaseUserModel.m
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/EaseUI/EMUIKit/Model/EaseUserModel.m
+END
+EaseMessageModel.h
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/EaseUI/EMUIKit/Model/EaseMessageModel.h
+END
+IConversationModel.h
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/EaseUI/EMUIKit/Model/IConversationModel.h
+END
+EaseMessageModel.m
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/EaseUI/EMUIKit/Model/EaseMessageModel.m
+END
+IUserModel.h
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/yo/!svn/ver/7967/source/ios/student/yocheche/yocheche/EASE/EaseUI/EMUIKit/Model/IUserModel.h
+END
